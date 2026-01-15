@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Mileage Planner</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="engine.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Weekly Mileage Planner</h1>
+
+        <!-- GRAPH -->
+        <section id="graph-section">
+            <div>
+                <canvas id="myChart"></canvas>
+            </div>
+        </section>
+
+        <!-- INPUTS -->
+        <section>
+            <div id="days"></div>
+            
+            <div class="goal-section">
+                <label>Goal mileage</label>
+                <input id="goal-mileage" type="number" placeholder="0">
+            </div>
+            
+            <button id="calculate-button" onclick="distributeRemaining()">
+                Distribute remaining mileage
+            </button>
+        </section>
+
+        <!-- OUTPUTS -->
+        <section id="output-section">
+            <h3>Mileage remaining: <span id="remaining-mileage">0</span></h3>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+
+</html>
