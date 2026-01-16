@@ -47,7 +47,20 @@ window.addEventListener("DOMContentLoaded", () => {
         },
         options: {
             scales: {
-                y: { beginAtZero: true }
+                y: { 
+                    beginAtZero: true,
+                    grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                    ticks: { color: '#666' }
+                },
+                x: {
+                    grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                    ticks: { color: '#666' }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: { color: '#666' }
+                }
             }
         }
     });
@@ -62,7 +75,7 @@ function calculateMileage() {
         let input = document.getElementById(day).value;
 
         // If input is empty string OR is not a number, set to 0. Otherwise, parse it.
-        mileagePerDay[day] = (input === "" || isNaN(input)) ? 0 : parseFloat(input);
+        mileagePerDay[day] = (input === "" || isNaN(input)) ? null : parseFloat(input);
         console.log(day, mileagePerDay[day]);
     }
     calculateRemaining(mileagePerDay);
@@ -80,17 +93,15 @@ function calculateRemaining(mileagePerDay) {
         totalRun += mileagePerDay[day];
     }
     remainingMileage = goalmileage - totalRun;
-    document.getElementById("remaining-mileage").innerHTML = remainingMileage;
+    document.getElementById("remaining-mileage").innerHTML = isNaN(remainingMileage) ? 0 : remainingMileage;
 }
 
 // Initilize array for days with zero miles 
 function distributeRemaining() {
     let zeroDays = [];
-    console.log("Clicked");
-
 
     for (let day of days) {
-        if (mileagePerDay[day] == 0) {
+        if (mileagePerDay[day] == null) {
             zeroDays.push(day);
         }
     }
@@ -103,20 +114,16 @@ function distributeRemaining() {
 
     for (let day of zeroDays) {
         mileagePerDay[day] = remainingMileagePerDay;
-        updateHTMLAfterDistribution();
+        document.getElementById(day).value = remainingMileagePerDay;
     }
-
+    // Update chart/HTML once after loop finishes
+    updateHTMLAfterDistribution();
 }
 
 function updateHTMLAfterDistribution() {
-
-    for (let day of days) {
-        document.getElementById(`${day}`).innerHTML = mileagePerDay[day];
-    }
-    updateChart();
-
-    // <input id="${days[i]}" type="number" min="0" oninput="calculateMileage()">
-
+    // Input values are already updated in the loop above via .value
+    // We just need to ensure the logic flows correctly
+    calculateMileage(); // Recalculate totals and chart
 }
 
 
@@ -130,4 +137,34 @@ function updateChart() {
 
     // re render the chart
     myChart.update();
+}
+
+// --- NEW DARK MODE FUNCTION ---
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    
+    // Check if dark mode is active
+    const isDark = document.body.classList.contains('dark-mode');
+    
+    // Define colors based on mode
+    const textColor = isDark ? '#ffffff' : '#666666';
+    const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+
+    // Apply colors to Chart
+    if (myChart) {
+        // Update Scales (Axes)
+        myChart.options.scales.x.ticks.color = textColor;
+        myChart.options.scales.y.ticks.color = textColor;
+        myChart.options.scales.x.grid.color = gridColor;
+        myChart.options.scales.y.grid.color = gridColor;
+        
+        // Update Legend
+        myChart.options.plugins.legend.labels.color = textColor;
+        
+        myChart.update();
+    }
+
+    // Update button icon if you have one with id="theme-toggle"
+    const btn = document.getElementById('theme-toggle');
+    if(btn) btn.textContent = isDark ? '☀️' : '🌙';
 }
