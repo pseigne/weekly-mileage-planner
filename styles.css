@@ -198,12 +198,12 @@ input:hover {
 }
 
 footer {
-    position: absolute;
-    bottom: 10px;
+    margin-top: 40px;
     padding: 20px;
+    text-align: center;
     color: var(--color-secondary);
     opacity: 0.5;
-    z-index: -1;
+    font-size: 14px;
 }
 
 /* Dark Mode Overrides */
