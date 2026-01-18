@@ -1,3 +1,26 @@
+:root {
+    --color-primary: hsl(185, 50%, 90%);
+    --color-secondary: hsl(185, 50%, 10%);
+    --color-tertiary: hsl(245, 80%, 20%);
+    --color-accent: hsl(125, 80%, 20%);
+    --color-card: hsl(185, 50%, 98%);
+    
+    /* shadows */
+    --shadow-s: inset 0 1px 2px #ffffff30, 0 1px 2px #00000030, 0 2px 4px #00000015;
+}
+
+.dark {
+    --color-primary: hsl(185, 50%, 10%);
+    --color-secondary: hsl(185, 50%, 90%);
+    --color-tertiary: hsl(245, 80%, 80%);
+    --color-accent: hsl(125, 80%, 80%);
+    --color-card: hsl(185, 50%, 20%);
+    --shadow-s: inset 0 1px 2px #ffffff15, 0 1px 2px #00000050, 0 2px 4px #00000030;
+}
+
+
+
+
 * {
     margin: 0;
     padding: 0;
@@ -6,10 +29,10 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #f5f5f5;
+    background: var(--color-primary);
     min-height: 100vh;
     padding: 40px 20px;
-    color: black;
+    color: var(--color-secondary);
     border-radius: 10px;
 }
 
@@ -21,24 +44,29 @@ body {
 
 h1 {
     text-align: center;
-    color: black;
+    color: var(--color-secondary);
     margin-bottom: 40px;
     font-size: 1.8em;
-    font-weight: 600;
+    font-weight: 1000;
     letter-spacing: -0.5px;
 }
 
 section {
-    background: #fafafa;
+    background: var(--color-card);
     border-radius: 10px;
     padding: 30px;
     margin-bottom: 16px;
+    box-shadow: var(--shadow-s);
 }
 
 /* Graph Section */
 #myChart {
     max-height: 280px;
     justify-content: center;
+}
+
+canvas {
+    filter: brightness(1);
 }
 
 /* Inputs Section */
@@ -61,28 +89,28 @@ section {
     align-items: center;
     gap: 8px;
     font-weight: 400;
-    color: black;
+    color: var(--color-secondary);
     margin-bottom: 5px;
     font-size: 14px;
 }
 
 input {
-    border: 0px solid #e0e0e0;
-    background-color: #eeeeee;
+    border: 2px solid transparent;
+    background-color: var(--color-card);
+    color: var(--color-secondary);
     border-radius: 10px;
-    transition: border-color 0.2s ease;
     transition: ease-in-out 0.2s;
+    box-shadow: var(--shadow-s);
 }
 
 input:focus {
     outline: none;
-    border-color: #aaa;
-    background-color: #dedede;
+    border-color: var(--color-tertiary);
     transition: ease-in-out 0.2s;
 }
 
 input:hover {
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--shadow-s);
 }
 
 .day input {
@@ -92,9 +120,6 @@ input:hover {
     text-align: center;
 }
 
-.day input:focus {
-    scale: 1.05;
-}
 
 .goal-section {
     display: flex;
@@ -106,7 +131,7 @@ input:hover {
 
 .goal-section label {
     font-weight: 400;
-    color: black;
+    color: var(--color-secondary);
     font-size: 15px;
 }
 
@@ -115,44 +140,47 @@ input:hover {
     min-width: 150px;
     padding: 10px;
     font-size: 15px;
+    box-shadow: var(--shadow-s);
 }
 
 #calculate-button {
     width: 100%;
     padding: 12px;
-    background: black;
-    color: white;
+    background: var(--color-accent);
+    color: var(--color-primary);
     border: none;
     border-radius: 16px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: ease-in-out 100ms;
+    box-shadow: var(--shadow-s);
 }
 
 #calculate-button:hover {
-    background: black;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
-    transition: ease-in 100ms;
+    opacity: 0.9;
+    box-shadow: var(--shadow-s);
+    transition: ease-in-out 100ms;
 }
 
 /* Outputs Section */
 #output-section {
     text-align: center;
-    background: #fafafa;
+    background: var(--color-card);
+    box-shadow: var(--shadow-s);
 }
 
 #output-section h3 {
     font-size: 1em;
     font-weight: 400;
-    color: black;
+    color: var(--color-secondary);
     margin-bottom: 5px;
 }
 
 #remaining-mileage {
     font-weight: 700;
     font-size: 2em;
-    color: black;
+    color: var(--color-secondary);
 }
 
 @media (max-width: 768px) {
@@ -173,63 +201,28 @@ footer {
     position: absolute;
     bottom: 10px;
     padding: 20px;
-    color: #898989;
+    color: var(--color-secondary);
+    opacity: 0.5;
     z-index: -1;
 }
 
 /* Dark Mode Overrides */
-body.dark-mode {
-    background: #121212;
-    color: #ffffff;
+body.dark {
+    background: var(--color-primary);
+    color: var(--color-secondary);
+}
+.container.dark {
+    color: var(--color-card);
 }
 
-body.dark-mode h1 {
-    color: #ffffff;
+body.dark h1 {
+    color: var(--color-secondary);
 }
 
-body.dark-mode section {
-    background: #1e1e1e;
+body.dark .day label {
+    color: var(--color-secondary);
 }
 
-body.dark-mode .day label {
-    color: #ffffff;
-}
-
-body.dark-mode input {
-    background-color: #2d2d2d;
-    color: white;
-}
-
-body.dark-mode input:focus {
-    background-color: #333333;
-}
-
-body.dark-mode input:hover {
-    box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode .goal-section label {
-    color: #ffffff;
-}
-
-body.dark-mode #calculate-button {
-    background: #ffffff;
-    color: #000000;
-}
-
-body.dark-mode #calculate-button:hover {
-    background: #e0e0e0;
-    box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode #output-section {
-    background: #1e1e1e;
-}
-
-body.dark-mode #output-section h3 {
-    color: #ffffff;
-}
-
-body.dark-mode #remaining-mileage {
-    color: #ffffff;
+body.dark canvas {
+    filter: brightness(0.9);
 }

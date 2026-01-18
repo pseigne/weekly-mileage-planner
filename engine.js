@@ -33,6 +33,9 @@ window.addEventListener("DOMContentLoaded", () => {
     // Display Days of Week
     const ctx = document.getElementById('myChart');
     const currentData = days.map(day => mileagePerDay[day]);
+    const isDark = document.body.classList.contains('dark');
+    const textColor = isDark ? '#e6e6e6' : '#1a1a1a';
+    const gridColor = isDark ? '#333333' : '#e0e0e0';
 
     myChart = new Chart(ctx, {
         type: 'bar',
@@ -42,24 +45,34 @@ window.addEventListener("DOMContentLoaded", () => {
                 label: 'Mileage',
                 data: currentData,
                 borderWidth: 1,
-                backgroundColor: '#36A2EB'
+                backgroundColor: isDark ? '#a3f5aa' : '#0a5c11'
             }]
         },
         options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: textColor
+                    }
+                }
+            },
             scales: {
                 y: { 
                     beginAtZero: true,
-                    grid: { color: 'rgba(0, 0, 0, 0.1)' },
-                    ticks: { color: '#666' }
+                    ticks: {
+                        color: textColor
+                    },
+                    grid: {
+                        color: gridColor
+                    }
                 },
                 x: {
-                    grid: { color: 'rgba(0, 0, 0, 0.1)' },
-                    ticks: { color: '#666' }
-                }
-            },
-            plugins: {
-                legend: {
-                    labels: { color: '#666' }
+                    ticks: {
+                        color: textColor
+                    },
+                    grid: {
+                        color: gridColor
+                    }
                 }
             }
         }
@@ -93,7 +106,7 @@ function calculateRemaining(mileagePerDay) {
         totalRun += mileagePerDay[day];
     }
     remainingMileage = goalmileage - totalRun;
-    document.getElementById("remaining-mileage").innerHTML = isNaN(remainingMileage) ? 0 : remainingMileage;
+    document.getElementById("remaining-mileage").innerHTML = remainingMileage;
 }
 
 // Initilize array for days with zero miles 
@@ -115,15 +128,20 @@ function distributeRemaining() {
     for (let day of zeroDays) {
         mileagePerDay[day] = remainingMileagePerDay;
         document.getElementById(day).value = remainingMileagePerDay;
+        updateHTMLAfterDistribution();
     }
-    // Update chart/HTML once after loop finishes
-    updateHTMLAfterDistribution();
+
 }
 
 function updateHTMLAfterDistribution() {
-    // Input values are already updated in the loop above via .value
-    // We just need to ensure the logic flows correctly
-    calculateMileage(); // Recalculate totals and chart
+
+    for (let day of days) {
+        document.getElementById(`${day}`).innerHTML = mileagePerDay[day];
+    }
+    updateChart();
+
+    // <input id="${days[i]}" type="number" min="0" oninput="calculateMileage()">
+
 }
 
 
@@ -139,32 +157,5 @@ function updateChart() {
     myChart.update();
 }
 
-// --- NEW DARK MODE FUNCTION ---
-function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-    
-    // Check if dark mode is active
-    const isDark = document.body.classList.contains('dark-mode');
-    
-    // Define colors based on mode
-    const textColor = isDark ? '#ffffff' : '#666666';
-    const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
 
-    // Apply colors to Chart
-    if (myChart) {
-        // Update Scales (Axes)
-        myChart.options.scales.x.ticks.color = textColor;
-        myChart.options.scales.y.ticks.color = textColor;
-        myChart.options.scales.x.grid.color = gridColor;
-        myChart.options.scales.y.grid.color = gridColor;
-        
-        // Update Legend
-        myChart.options.plugins.legend.labels.color = textColor;
-        
-        myChart.update();
-    }
 
-    // Update button icon if you have one with id="theme-toggle"
-    const btn = document.getElementById('theme-toggle');
-    if(btn) btn.textContent = isDark ? '☀️' : '🌙';
-}
